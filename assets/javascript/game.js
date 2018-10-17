@@ -70,10 +70,19 @@ let game = {
     },
 
     unblurImage: function() {
-        // decrement counter
-        this.blurCounter = this.blurCounter - 5;
-        // apply new counter value to imageDisplay css filter
-        document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
+        // user has not yet guessed the word
+        if(!this.userGuessedWord){
+            // decrement blurCounter
+            this.blurCounter = this.blurCounter - 1;
+            // apply new blurCounter value to imageDisplay css filter
+            document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
+        }else if (this.numGuessesRemaining === 0){
+            // user has lost game, unblur the photo
+            document.getElementById('imageDisplay').style.filter = `blur(0px)`;
+        }else if (this.userGuessedWord){
+            // user has won the game, unblur the photo
+            document.getElementById('imageDisplay').style.filter = `blur(0px)`;
+        }
     },
 
     showStats: function () {
@@ -113,16 +122,16 @@ let game = {
 
     runComparison: function (letter) {
             // loop through secretWord string
-            for (var j=0; j < this.secretWord.length; j++) {
-                // if an index of secretWord matches letter
-                if (this.secretWord[j] === letter) {
-                    // set the value of this index in answer array to letter
-                    this.answerArray[j] = letter;
+        for (var j=0; j < this.secretWord.length; j++) {
+            // if an index of secretWord matches letter
+            if (this.secretWord[j] === letter) {
+                // set the value of this index in answer array to letter
+                this.answerArray[j] = letter;
             }
-            
         }
         if (!this.answerArray.includes("_")){
-            alert(`You've won!`);
+            console.log(`You've won!`);
+            this.userGuessedWord = true;
         }
         else if (this.numLettersGuessed >= this.numTotalGuesses) {
             this.active = false;
