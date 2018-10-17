@@ -3,6 +3,7 @@ let initializeDisplay = document.getElementById('initializeDisplay');
 let gameDisplay = document.getElementById('gameDisplay');
 let winsDisplay = document.getElementById('winsDisplay');
 let lossesDisplay = document.getElementById('lossesDisplay');
+let imageDisplay = document.getElementById('imageDisplay');
 let numLettersGuessedDisplay = document.getElementById('numLettersGuessedDisplay');
 let numGuessesRemaining = document.getElementById('numGuessesRemaining');
 let lettersGuessedDisplay = document.getElementById('lettersGuessedDisplay');
@@ -18,6 +19,7 @@ document.onkeyup = function (event) {
         game.initializeGame(); /* initialize the game */
     } else if (game.active) {
         game.addLetter(letter);
+        game.unblurImage();
         game.showStats();
     }
 }
@@ -29,6 +31,7 @@ let game = {
     userGuessedWord: false,
     numLettersGuessed: 0,
     numGuessesRemaining: 0,
+    blurCounter: 30,
     lettersGuessed: [],
     answerArray: [],
     secretWord: "",
@@ -66,9 +69,12 @@ let game = {
         }
     },
 
-// ------------------------answerArray is not reseting on game reset------------------------
-// -----------------------------dont know which function yet-----------------------------
-
+    unblurImage: function() {
+        // decrement counter
+        this.blurCounter = this.blurCounter - 5;
+        // apply new counter value to imageDisplay css filter
+        document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
+    },
 
     showStats: function () {
         winsDisplay.textContent = (`Wins: ${this.wins}`);
