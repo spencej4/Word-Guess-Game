@@ -27,6 +27,7 @@ body {
     width: 100vw;
     font-weight: 100;
     line-height: 1;
+    position: relative;
     background-color: #eee;
     color: white;
     text-align: center;
@@ -48,15 +49,39 @@ button:focus {
     margin: 0 auto;
     padding-top: 25%;
     background-color: black;
+    z-index: 1;
+}
+
+#gameTitle {
+    top: 40px;
+    left: 38px;
+    width: 240px;
+    height: 85px;
+    font-size: 40px;
+    position: absolute;
+    transform: rotate(-45deg);
+    color: black;
+    clear: both;
+    z-index: 10;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 2px solid rgb(9, 10, 11);
+}
+
+.rotated {
+    transform: rotate(45deg);
+    background-color: rgb(105, 228, 255);
+
 }
 
 #gameDisplay {
-    width: 95%;
+    width: 85%;
     height: 90vh;
     margin: 20px auto 0 auto;
     padding: 0 20px 0 20px;
     display: none;
     position: relative;
+    clear: both;
     text-align: center;
     background-color: rgba(160, 156, 159, 0.3);
     border-radius: 3px;
@@ -95,7 +120,7 @@ h2 {
     height: 100%;
     width: auto;
     z-index: 2;
-    /* filter: blur(30px); */
+    border-radius: 5px;
 }
 
 #promptReset {
@@ -154,7 +179,7 @@ h2 {
     letter-spacing: 2px;
     margin: 57% auto 15px auto;
     z-index: 3;
-    line-height: 90px;
+    line-height: 100px;
     /* float: left; */
     /* clear: both; */
     text-align: center;

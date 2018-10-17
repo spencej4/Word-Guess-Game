@@ -26,7 +26,6 @@
 (function($){ 
   
   $(function() {
-      console.log('flash!');
 
     var flashDiv = '<div id="flash" style="display:none;"> \
                       <div class="flash_close"></div> \
@@ -37,7 +36,7 @@
     $.extend({
       flash: function(content, options) {
         var flash = $('#flash');
-      
+        
         flash.find('.flash_inner').html(content);
         flash
           .show()

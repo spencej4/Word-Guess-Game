@@ -1,4 +1,4 @@
-let randoWords = ["poutine", "blog", "beard", "hashtag", "portlandia", "fixie", "pug", "flannel", "coffee", "selfie", "typewriter", "polaroid", "mustache"];
+let randoWords = ["poutine", "beard", "hashtag", "portlandia", "fixie", "pug", "coffee", "typewriter", "polaroid", "mustache"];
 let initializeDisplay = document.getElementById('initializeDisplay');
 let gameDisplay = document.getElementById('gameDisplay');
 let winsDisplay = document.getElementById('winsDisplay');
@@ -44,7 +44,6 @@ let game = {
 
     selectSecretWord: function () {
         this.secretWord = randoWords[Math.floor(Math.random() * randoWords.length)];
-        console.log(this.secretWord);
     },
 
     selectImage: function () {
@@ -93,7 +92,7 @@ let game = {
         this.showStats();
         this.createMaxNumGuesses();
         this.createNumGuessesRemaining();
-        this.promptReset();
+        // this.promptReset();
     },
 
     showGame: function () {
@@ -101,9 +100,8 @@ let game = {
     },
 
     showWord: function () {
-        // wordDisplay.textContent = ""; /* reset textContent to display nothing */
         for (var i = 0; i < this.secretWord.length; i++) {
-            // wordDisplay.textContent += (`_ `); /* draw underlines for the word */
+            // draw underlines for the word 
             this.answerArray[i] = "_";
         }
     },
@@ -131,12 +129,10 @@ let game = {
         numGuessesRemainingDisplay.textContent = (`# of guesses remaining: ${this.numGuessesRemaining}`)
         lettersGuessedDisplay.textContent = (`Letters guessed: ${this.lettersGuessed}`);
         wordDisplay.textContent = (this.answerArray.join(" "));
-        console.log(`Answer array: ${this.answerArray}`);
     },
 
     createMaxNumGuesses: function () {
         this.numTotalGuesses = this.secretWord.length + 3;
-        console.log(`Total guesses: ${this.numTotalGuesses}`);
     },
 
     createNumGuessesRemaining: function () {
@@ -155,11 +151,16 @@ let game = {
             this.runComparison(letter);
         } else {
             // alert user they've already guessed that letter
-            $('#flash').flash();
+            $.flash("You've Already Guessed That Letter");
         }
     },
 
     runComparison: function (letter) {
+        // if secret word does not include letter
+        if(this.secretWord.includes(letter) === false) {
+            // play this sound
+            this.playWrongSound();
+        }
         // loop through secretWord string
         for (var j = 0; j < this.secretWord.length; j++) {
             // if an index of secretWord matches letter
@@ -170,13 +171,12 @@ let game = {
             }
         }
         if (!this.answerArray.includes("_")) {
-            console.log(`You've won!`);
             this.userGuessedWord = true;
-            this.wins++;
+            this.wins++;    
+            $.flash("You've Won!");        
         } else if (this.numLettersGuessed >= this.numTotalGuesses) {
-            this.active = false;
+            $.flash("You lost. WhatEVER....:(");
             this.losses = this.losses + 1;
-            // console.log(`You've guessed too many times. You guessed ${this.numLettersGuessed}`);
             this.reset();
         }
     },
@@ -187,21 +187,28 @@ let game = {
         myAudio.play();
     },
 
+    playWrongSound: function() {
+        let myAudio2 = document.createElement("audio");
+        myAudio2.src = "assets/sounds/wrong.mp3";
+        myAudio2.play();
+    },
+// ------------------------get this working------------------------
+// ----------------------------------------------------------------
     promptReset: function() {
-        if(this.userGuessedWord === true) {
-            this.promptResetDisplay.style.display = 'block';
+        switch (true) {
+            case (this.userGuessedWord === true):
+                this.promptResetDisplay.style.display = 'block';
+                break;
         }
     },
 
     reset: function () {
-        console.log('reset has run');
         this.userGuessedWord = false;
         this.lettersGuessed = [];
         this.numLettersGuessed = 0;
         this.secretWord = [];
         this.answerArray = [],
-            this.numTotalGuesses = 0;
-        // wordDisplay.textContent = "";
+        this.numTotalGuesses = 0;
         this.initializeGame();
     }
 };
