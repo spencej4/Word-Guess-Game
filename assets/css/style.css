@@ -51,7 +51,7 @@ button:focus {
 }
 
 #gameDisplay {
-    width: 80%;
+    width: 95%;
     height: 90vh;
     margin: 20px auto 0 auto;
     padding: 0 20px 0 20px;
@@ -81,9 +81,12 @@ h2 {
 }
 
 #imageDisplay {
-    width: 100%;
+    width: 66%;
     height: calc(100% - 30%);
-    position: block;
+    margin-top: 60px;
+    /* display: inline-block; */
+    /* position: block; */
+    float: left;
     overflow: hidden;
     filter: blur(30px);
 }
@@ -95,12 +98,37 @@ h2 {
     /* filter: blur(30px); */
 }
 
-#statsDisplay {
-    bottom: 0;
+#promptReset {
     width: 100%;
-    /* height: 200px; */
-    margin-top: 50px;
+    height: 151px;
+    display: none;
+    text-align: center;
+}
+
+#playAgain {
+    width: 185px;
+    height: 60px;
+    display: block;
+    background-color: #55c5c8;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+#statsDisplay {
+    width: 34%;
+    height: 100%;
+    margin: 60px 0 0 0;
+    padding: 0;
+    display: inline-block;
     position: relative;
+    text-align: left;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+#statsDisplay p {
+    color: black;
 }
 
 .correctLettersDisplay {
@@ -121,8 +149,18 @@ h2 {
 }
 
 #wordDisplay {
+    height: 120px;
+    width: 100%;
     letter-spacing: 2px;
-    margin-bottom: 15px;
+    margin: 57% auto 15px auto;
+    z-index: 3;
+    line-height: 90px;
+    /* float: left; */
+    /* clear: both; */
+    text-align: center;
+    font-size: 38px;
+    background-color: rgba(73, 28, 163, 0.7);
+    border-radius: 10px;
 }
 
 .flashMessage {

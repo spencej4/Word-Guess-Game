@@ -1,9 +1,10 @@
-let randoWords = ["poutine", "blog", "beard", "stumptown", "hashtag", "portland", "fixie", "pug", "coldpress", "flannel", "coffee", "selfie", "typewriter", "polaroid", "mustache", "vaporware"];
+let randoWords = ["poutine", "blog", "beard", "hashtag", "portlandia", "fixie", "pug", "flannel", "coffee", "selfie", "typewriter", "polaroid", "mustache"];
 let initializeDisplay = document.getElementById('initializeDisplay');
 let gameDisplay = document.getElementById('gameDisplay');
 let winsDisplay = document.getElementById('winsDisplay');
 let lossesDisplay = document.getElementById('lossesDisplay');
 let imageDisplay = document.getElementById('imageDisplay');
+let promptResetDisplay = document.getElementById('promptReset');
 let numLettersGuessedDisplay = document.getElementById('numLettersGuessedDisplay');
 let numGuessesRemaining = document.getElementById('numGuessesRemaining');
 let lettersGuessedDisplay = document.getElementById('lettersGuessedDisplay');
@@ -46,15 +47,53 @@ let game = {
         console.log(this.secretWord);
     },
 
+    selectImage: function () {
+        switch (true) {
+            case this.secretWord === 'pug':
+                $('#image').attr('src', 'assets/images/pug.jpeg');
+                break;
+            case this.secretWord === 'beard':
+                $('#image').attr('src', 'assets/images/beard.jpeg');
+                break;
+            case this.secretWord === 'poutine':
+                $('#image').attr('src', 'assets/images/poutine.jpg');
+                break;
+            case this.secretWord === 'hashtag':
+                $('#image').attr('src', 'assets/images/hashtag.jpg');
+                break;
+            case this.secretWord === 'typewriter':
+                $('#image').attr('src', 'assets/images/typewriter.jpg');
+                break;
+            case this.secretWord === 'polaroid':
+                $('#image').attr('src', 'assets/images/polaroid.jpeg');
+                break;
+            case this.secretWord === 'mustache':
+                $('#image').attr('src', 'assets/images/mustache.jpg');
+                break;
+            case this.secretWord === 'fixie':
+                $('#image').attr('src', 'assets/images/fixie.jpeg');
+                break;
+            case this.secretWord === 'coffee':
+                $('#image').attr('src', 'assets/images/coffee.jpeg');
+                break;
+            case this.secretWord === 'portlandia':
+                $('#image').attr('src', 'assets/images/portlandia.jpg');
+                break;
+        }
+
+    },
+
     initializeGame: function () {
         this.active = true; /* make the game active */
         this.selectSecretWord(); /*initialize functions*/
+        this.selectImage();
         this.hideInitialize();
         this.showGame();
         this.showWord();
         this.showStats();
         this.createMaxNumGuesses();
         this.createNumGuessesRemaining();
+        this.promptReset();
     },
 
     showGame: function () {
@@ -69,17 +108,17 @@ let game = {
         }
     },
 
-    unblurImage: function() {
+    unblurImage: function () {
         // user has not yet guessed the word
-        if(!this.userGuessedWord){
+        if (!this.userGuessedWord) {
             // decrement blurCounter
             this.blurCounter = this.blurCounter - 1;
             // apply new blurCounter value to imageDisplay css filter
             document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
-        }else if (this.numGuessesRemaining === 0){
+        } else if (this.numGuessesRemaining === 0) {
             // user has lost game, unblur the photo
             document.getElementById('imageDisplay').style.filter = `blur(0px)`;
-        }else if (this.userGuessedWord){
+        } else if (this.userGuessedWord) {
             // user has won the game, unblur the photo
             document.getElementById('imageDisplay').style.filter = `blur(0px)`;
         }
@@ -88,8 +127,8 @@ let game = {
     showStats: function () {
         winsDisplay.textContent = (`Wins: ${this.wins}`);
         lossesDisplay.textContent = (`Losses: ${this.losses}`);
-        numLettersGuessedDisplay.textContent = (`Number of letters guessed: ${this.numLettersGuessed}`);
-        numGuessesRemainingDisplay.textContent = (`Number of guesses remaining: ${this.numGuessesRemaining}`)
+        numLettersGuessedDisplay.textContent = (`# of letters guessed: ${this.numLettersGuessed}`);
+        numGuessesRemainingDisplay.textContent = (`# of guesses remaining: ${this.numGuessesRemaining}`)
         lettersGuessedDisplay.textContent = (`Letters guessed: ${this.lettersGuessed}`);
         wordDisplay.textContent = (this.answerArray.join(" "));
         console.log(`Answer array: ${this.answerArray}`);
@@ -100,7 +139,7 @@ let game = {
         console.log(`Total guesses: ${this.numTotalGuesses}`);
     },
 
-    createNumGuessesRemaining: function() {
+    createNumGuessesRemaining: function () {
         this.numGuessesRemaining = this.numTotalGuesses;
     },
 
@@ -121,23 +160,36 @@ let game = {
     },
 
     runComparison: function (letter) {
-            // loop through secretWord string
-        for (var j=0; j < this.secretWord.length; j++) {
+        // loop through secretWord string
+        for (var j = 0; j < this.secretWord.length; j++) {
             // if an index of secretWord matches letter
             if (this.secretWord[j] === letter) {
                 // set the value of this index in answer array to letter
                 this.answerArray[j] = letter;
+                this.playSuccessSound();
             }
         }
-        if (!this.answerArray.includes("_")){
+        if (!this.answerArray.includes("_")) {
             console.log(`You've won!`);
             this.userGuessedWord = true;
-        }
-        else if (this.numLettersGuessed >= this.numTotalGuesses) {
+            this.wins++;
+        } else if (this.numLettersGuessed >= this.numTotalGuesses) {
             this.active = false;
             this.losses = this.losses + 1;
             // console.log(`You've guessed too many times. You guessed ${this.numLettersGuessed}`);
             this.reset();
+        }
+    },
+
+    playSuccessSound: function () {
+        let myAudio = document.createElement("audio");
+        myAudio.src = "assets/sounds/success.mp3";
+        myAudio.play();
+    },
+
+    promptReset: function() {
+        if(this.userGuessedWord === true) {
+            this.promptResetDisplay.style.display = 'block';
         }
     },
 
@@ -148,7 +200,7 @@ let game = {
         this.numLettersGuessed = 0;
         this.secretWord = [];
         this.answerArray = [],
-        this.numTotalGuesses = 0;
+            this.numTotalGuesses = 0;
         // wordDisplay.textContent = "";
         this.initializeGame();
     }
