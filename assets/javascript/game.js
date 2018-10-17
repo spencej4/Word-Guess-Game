@@ -4,7 +4,7 @@ let gameDisplay = document.getElementById('gameDisplay');
 let winsDisplay = document.getElementById('winsDisplay');
 let lossesDisplay = document.getElementById('lossesDisplay');
 let imageDisplay = document.getElementById('imageDisplay');
-let promptResetDisplay = document.getElementById('promptReset');
+let playAgainDisplay = document.getElementById('playAgain');
 let numLettersGuessedDisplay = document.getElementById('numLettersGuessedDisplay');
 let numGuessesRemaining = document.getElementById('numGuessesRemaining');
 let lettersGuessedDisplay = document.getElementById('lettersGuessedDisplay');
@@ -110,7 +110,7 @@ let game = {
         // user has not yet guessed the word
         if (!this.userGuessedWord) {
             // decrement blurCounter
-            this.blurCounter = this.blurCounter - 1;
+            this.blurCounter = this.blurCounter - 5;
             // apply new blurCounter value to imageDisplay css filter
             document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
         } else if (this.numGuessesRemaining === 0) {
@@ -125,9 +125,9 @@ let game = {
     showStats: function () {
         winsDisplay.textContent = (`Wins: ${this.wins}`);
         lossesDisplay.textContent = (`Losses: ${this.losses}`);
-        numLettersGuessedDisplay.textContent = (`# of letters guessed: ${this.numLettersGuessed}`);
-        numGuessesRemainingDisplay.textContent = (`# of guesses remaining: ${this.numGuessesRemaining}`)
-        lettersGuessedDisplay.textContent = (`Letters guessed: ${this.lettersGuessed}`);
+        numLettersGuessedDisplay.textContent = (`${this.numLettersGuessed}`);
+        numGuessesRemainingDisplay.textContent = (`${this.numGuessesRemaining}`)
+        lettersGuessedDisplay.textContent = (`${this.lettersGuessed}`);
         wordDisplay.textContent = (this.answerArray.join(" "));
     },
 
@@ -173,11 +173,13 @@ let game = {
         if (!this.answerArray.includes("_")) {
             this.userGuessedWord = true;
             this.wins++;    
-            $.flash("You've Won!");        
+            $.flash("You've Won!");  
+            this.promptReset();
         } else if (this.numLettersGuessed >= this.numTotalGuesses) {
             $.flash("You lost. WhatEVER....:(");
             this.losses = this.losses + 1;
-            this.reset();
+            // this.reset();
+            this.promptReset();
         }
     },
 
@@ -192,23 +194,24 @@ let game = {
         myAudio2.src = "assets/sounds/wrong.mp3";
         myAudio2.play();
     },
-// ------------------------get this working------------------------
-// ----------------------------------------------------------------
+
     promptReset: function() {
-        switch (true) {
-            case (this.userGuessedWord === true):
-                this.promptResetDisplay.style.display = 'block';
-                break;
-        }
+        playAgainDisplay.style.display = 'block';
+        $("#playAgain").click(function () {
+            game.reset();
+        });
     },
 
     reset: function () {
+        playAgainDisplay.style.display = 'none';
         this.userGuessedWord = false;
         this.lettersGuessed = [];
         this.numLettersGuessed = 0;
-        this.secretWord = [];
+        this.secretWord = "";
         this.answerArray = [],
         this.numTotalGuesses = 0;
+        this.blurCounter = 30;
+        document.getElementById('imageDisplay').style.filter = `blur(${this.blurCounter}px)`;
         this.initializeGame();
     }
 };
