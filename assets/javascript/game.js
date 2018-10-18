@@ -42,6 +42,18 @@ let game = {
         initializeDisplay.style.display = "none";
     },
 
+    initializeGame: function () {
+        this.active = true; /* make the game active */
+        this.selectSecretWord(); /*initialize functions*/
+        this.selectImage();
+        this.hideInitialize();
+        this.showGame();
+        this.showWord();
+        this.showStats();
+        this.createMaxNumGuesses();
+        this.createNumGuessesRemaining();
+    },
+
     selectSecretWord: function () {
         this.secretWord = randoWords[Math.floor(Math.random() * randoWords.length)];
     },
@@ -82,23 +94,10 @@ let game = {
 
     },
 
-    initializeGame: function () {
-        this.active = true; /* make the game active */
-        this.selectSecretWord(); /*initialize functions*/
-        this.selectImage();
-        this.hideInitialize();
-        this.showGame();
-        this.showWord();
-        this.showStats();
-        this.createMaxNumGuesses();
-        this.createNumGuessesRemaining();
-        // this.promptReset();
-    },
-
     showGame: function () {
         gameDisplay.style.display = 'block';
     },
-
+    
     showWord: function () {
         for (var i = 0; i < this.secretWord.length; i++) {
             // draw underlines for the word 
