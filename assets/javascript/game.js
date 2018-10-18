@@ -58,7 +58,7 @@ let game = {
         this.secretWord = randoWords[Math.floor(Math.random() * randoWords.length)];
     },
 
-    selectImage: function () {
+    selectImage: function () { /* redundant, not dynamic. strapped for time */
         switch (true) {
             case this.secretWord === 'pug':
                 $('#image').attr('src', 'assets/images/pug.jpeg');
@@ -91,13 +91,12 @@ let game = {
                 $('#image').attr('src', 'assets/images/portlandia.jpg');
                 break;
         }
-
     },
 
     showGame: function () {
         gameDisplay.style.display = 'block';
     },
-    
+
     showWord: function () {
         for (var i = 0; i < this.secretWord.length; i++) {
             // draw underlines for the word 
@@ -131,6 +130,7 @@ let game = {
     },
 
     createMaxNumGuesses: function () {
+        // give player three more guesses than there are letters in the secret word
         this.numTotalGuesses = this.secretWord.length + 3;
     },
 
@@ -172,12 +172,12 @@ let game = {
         if (!this.answerArray.includes("_")) {
             this.userGuessedWord = true;
             this.wins++;    
+            this.playWinSound();
             $.flash("You've Won!");  
             this.promptReset();
         } else if (this.numLettersGuessed >= this.numTotalGuesses) {
-            $.flash("You lost. WhatEVER....:(");
+            $.flash("You lost.");
             this.losses = this.losses + 1;
-            // this.reset();
             this.promptReset();
         }
     },
@@ -192,6 +192,12 @@ let game = {
         let myAudio2 = document.createElement("audio");
         myAudio2.src = "assets/sounds/wrong.mp3";
         myAudio2.play();
+    },
+
+    playWinSound: function() {
+        let myAudio3 = document.createElement("audio");
+        myAudio3.src = "assets/sounds/win.mp3";
+        myAudio3.play();
     },
 
     promptReset: function() {
